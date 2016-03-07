@@ -216,19 +216,23 @@
         style="@style/MatchWrap.Horizontal"
         android:layout_height="50dp">
 
-        <TextView
+        <cn.bingoogolapple.badgeview.BGABadgeTextView
+            android:id="@+id/btv_main_chat"
             style="@style/WrapMatch"
             android:background="@drawable/mq_selector_item_center"
             android:clickable="true"
             android:drawableTop="@mipmap/chat"
-            android:onClick="startChat"
             android:paddingBottom="@dimen/mq_size_level1"
             android:paddingLeft="@dimen/mq_size_level4"
             android:paddingRight="@dimen/mq_size_level4"
             android:paddingTop="@dimen/mq_size_level1"
             android:text="客服"
             android:textColor="@color/black_middle"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            app:badge_bgColor="@color/red"
+            app:badge_dragable="true"
+            app:badge_gravity="rightTop"
+            app:badge_padding="5dp" />
 
         <View style="@style/VLine" />
 

@@ -1,56 +1,76 @@
 package com.meiqia.ue.ec.ui.activity;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 
-import com.meiqia.core.MQManager;
+import com.meiqia.core.MQMessageManager;
 import com.meiqia.meiqiasdk.activity.MQConversationActivity;
-import com.meiqia.meiqiasdk.util.MQConfig;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.bingoogolapple.badgeview.BGABadgeTextView;
+import cn.bingoogolapple.badgeview.BGABadgeable;
+import cn.bingoogolapple.badgeview.BGADragDismissDelegate;
 import cn.bingoogolapple.bgabanner.BGABanner;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 public class MainActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
     private static final int REQUEST_CODE_CONVERSATION_PERMISSIONS = 1;
+    private BGABadgeTextView mChatBtv;
+    private int mMessageCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initMeiqiaSDK();
+        initBanner();
 
-        initCube();
+        initChat();
     }
 
-    private void initMeiqiaSDK() {
-        MQManager.init(this, "a71c257c80dfe883d92a64dca323ec20", null);
-        MQConfig.backArrowIconResId = R.drawable.mq_ic_back_white;
-        MQConfig.bgColorTitle = R.color.colorPrimary;
-        MQConfig.textColorTitle = android.R.color.white;
-        MQConfig.titleGravity = MQConfig.MQTitleGravity.LEFT;
+    public void initChat() {
+        mChatBtv = (BGABadgeTextView) findViewById(R.id.btv_main_chat);
+        mChatBtv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                conversationWrapper();
+            }
+        });
+        mChatBtv.setDragDismissDelegage(new BGADragDismissDelegate() {
+            @Override
+            public void onDismiss(BGABadgeable badgeable) {
+                clearMessage();
+            }
+        });
     }
 
-    public void startChat(View v) {
-        conversationWrapper();
+    private void clearMessage() {
+        mMessageCount = 0;
+        mChatBtv.hiddenBadge();
     }
 
     @AfterPermissionGranted(REQUEST_CODE_CONVERSATION_PERMISSIONS)
     private void conversationWrapper() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
-//            startActivity(new Intent(MainActivity.this, HelpActivity.class));
+            // 跳转到聊天界面前，先清空当前界面统计的未读消息数，取消监听新消息的广播
+            clearMessage();
+            unRegisterMessageReceiver();
+
             startActivity(new Intent(MainActivity.this, MQConversationActivity.class));
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.mq_runtime_permission_tip), REQUEST_CODE_CONVERSATION_PERMISSIONS, perms);
@@ -71,15 +91,15 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         MQUtils.show(this, R.string.mq_permission_denied_tip);
     }
 
-    private void initCube() {
-        BGABanner mCubeBanner = (BGABanner) findViewById(R.id.banner);
+    private void initBanner() {
+        BGABanner banner = (BGABanner) findViewById(R.id.banner);
         List<View> views = new ArrayList<>();
         views.add(getPageView(R.mipmap.one));
         views.add(getPageView(R.mipmap.two));
         views.add(getPageView(R.mipmap.three));
         views.add(getPageView(R.mipmap.four));
         views.add(getPageView(R.mipmap.five));
-        mCubeBanner.setViews(views);
+        banner.setViews(views);
     }
 
     private View getPageView(@DrawableRes int resid) {
@@ -88,4 +108,34 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         return imageView;
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        registerMessageReceiver();
+    }
+
+    @Override
+    protected void onDestroy() {
+        unRegisterMessageReceiver();
+        super.onDestroy();
+    }
+
+    private void registerMessageReceiver() {
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter(MQMessageManager.ACTION_NEW_MESSAGE_RECEIVED));
+    }
+
+    private void unRegisterMessageReceiver() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (MQMessageManager.ACTION_NEW_MESSAGE_RECEIVED.equals(intent.getAction())) {
+                mMessageCount++;
+                mChatBtv.showTextBadge(mMessageCount > 99 ? "99+" : String.valueOf(mMessageCount));
+            }
+        }
+    };
 }

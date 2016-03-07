@@ -30,5 +30,6 @@ dependencies {
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'cn.bingoogolapple:bga-banner:2.0.3@aar'
-    compile 'com.github.bumptech.glide:glide:3.6.1'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'cn.bingoogolapple:bga-badgeview:1.0.8@aar'
 }

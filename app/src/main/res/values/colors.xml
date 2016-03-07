@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#17c7d1</color>
+    <color name="colorPrimaryDark">#17c7d1</color>
+    <color name="item_pressed">#EFEFEF</color>
+
+    <color name="red">#fc511f</color>
+    <color name="red_trans">#b3fc511f</color>
+    <color name="orange">#fd9026</color>
+    <color name="orange_tans">#b3fd9026</color>
+    <color name="black">#505456</color>
+    <color name="gray">#c0c0c0</color>
+
+    <color name="black_middle">#858990</color>
+    <color name="black_light">#c0c0c0</color>
+    <color name="black_dark">#505456</color>
+</resources>

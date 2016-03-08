@@ -14,4 +14,5 @@ public class Constants {
      * sdk pushid 前缀。目前app使用小米，其对应的前缀为「mi_」
      */
     public static final String KEY_SDK_PUSH_PREF = "mi_";
+    public static final String KEY_APP_NAME = "appName";
 }

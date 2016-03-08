@@ -83,11 +83,11 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     }
 
     @Override
-    public void onPermissionsGranted(List<String> perms) {
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
     }
 
     @Override
-    public void onPermissionsDenied(List<String> perms) {
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
         MQUtils.show(this, R.string.mq_permission_denied_tip);
     }
 

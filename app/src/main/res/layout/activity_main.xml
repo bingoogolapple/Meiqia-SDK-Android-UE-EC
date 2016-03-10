@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MatchMatch.Vertical"
-    android:background="@color/mq_bg_color">
+    android:background="@color/mq_activity_bg">
 
     <ScrollView
         style="@style/MatchAuto"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#17c7d1</color>
+    <color name="colorPrimary">#fc5369</color>
     <color name="colorPrimaryDark">@color/colorPrimary</color>
     <color name="item_pressed">#EFEFEF</color>
 

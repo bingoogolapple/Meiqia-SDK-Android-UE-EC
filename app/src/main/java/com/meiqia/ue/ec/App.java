@@ -45,9 +45,6 @@ public class App extends Application {
     private void initMeiqiaSDK() {
         initMQManager(null);
         MQConfig.ui.backArrowIconResId = R.drawable.mq_ic_back_white;
-        MQConfig.ui.titleBackgroundResId = R.color.colorPrimary;
-        MQConfig.ui.titleTextColorResId = android.R.color.white;
-        MQConfig.ui.rightChatBubbleColorResId = R.color.colorPrimary;
         MQConfig.ui.titleGravity = MQConfig.ui.MQTitleGravity.LEFT;
     }
 

@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">美洽x电商</string>
+    <string name="toast_exit_tip">再按一次返回键退出美洽x电商</string>
 
     <string name="content_one">
         软件开发的不朽经典\n

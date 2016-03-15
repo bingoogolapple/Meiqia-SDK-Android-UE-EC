@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 import android.os.Process;
 import android.util.Log;
 
@@ -11,13 +12,17 @@ import com.meiqia.core.MQManager;
 import com.meiqia.core.callback.OnClientInfoCallback;
 import com.meiqia.core.callback.OnInitCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
+import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.util.Constants;
 import com.meiqia.ue.ec.util.SimpleActivityLifecycleCallbacks;
+import com.squareup.leakcanary.LeakCanary;
+import com.squareup.leakcanary.RefWatcher;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.Logger;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +33,20 @@ import java.util.Map;
  */
 public class App extends Application {
     private static final String TAG = App.class.getSimpleName();
-    private static final int BACKGROUND = 0;
     private static App sInstance;
+    private long mLastPressBackKeyTime;
+    private LinkedList<Activity> mActivities = new LinkedList<>();
+    private RefWatcher mRefWatcher;
+
+    private static final int BACKGROUND = 0;
     private int mActivityState = BACKGROUND;
 
     @Override
     public void onCreate() {
         super.onCreate();
         sInstance = this;
+        mRefWatcher = LeakCanary.install(this);
+
 
         initMeiqiaSDK();
         initMiPush();
@@ -108,11 +119,53 @@ public class App extends Application {
                     backgroundState();
                 }
             }
+
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                mActivities.add(activity);
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                mActivities.remove(activity);
+            }
         });
     }
 
     public static App getInstance() {
         return sInstance;
+    }
+
+    public static RefWatcher getRefWatcher() {
+        return getInstance().mRefWatcher;
+    }
+
+    /**
+     * 双击后完全退出应用程序
+     */
+    public void exitWithDoubleClick() {
+        if (System.currentTimeMillis() - mLastPressBackKeyTime <= 1500) {
+            exit();
+        } else {
+            mLastPressBackKeyTime = System.currentTimeMillis();
+            MQUtils.show(this, R.string.toast_exit_tip);
+        }
+    }
+
+    /**
+     * 退出应用程序
+     */
+    public void exit() {
+        Activity activity;
+        while (mActivities.size() != 0) {
+            activity = mActivities.poll();
+            if (!activity.isFinishing()) {
+                activity.finish();
+            }
+        }
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.gc();
+        System.exit(0);
     }
 
     /**

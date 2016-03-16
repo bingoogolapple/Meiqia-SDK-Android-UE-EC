@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/MQMatchMatch.Vertical"
-    android:background="@color/mq_activity_bg"
-    android:gravity="center_vertical">
+    android:background="@color/mq_activity_bg">
 
-    <TextView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayoutppbar"
         style="@style/MQMatchWrap"
-        android:background="@drawable/mq_selector_item_center"
-        android:gravity="center"
-        android:onClick="preSale"
-        android:padding="@dimen/mq_size_level4"
-        android:text="售前" />
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <TextView
-        style="@style/MQMatchWrap"
-        android:layout_marginTop="@dimen/mq_size_level5"
-        android:background="@drawable/mq_selector_item_center"
-        android:gravity="center"
-        android:onClick="afterSale"
-        android:padding="@dimen/mq_size_level4"
-        android:text="售后" />
-</LinearLayout>
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabLayout"
+            style="@style/MQMatchWrap"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:tabIndicatorColor="@color/orange"
+            app:tabIndicatorHeight="3dp"
+            app:tabMode="fixed" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
+        style="@style/MQMatchMatch"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <com.meiqia.ue.ec.ui.widget.BadgeFloatingActionButton
+        android:id="@+id/bfab_main_chat"
+        style="@style/MQWrapWrap"
+        android:layout_gravity="bottom|right"
+        android:layout_marginBottom="@dimen/mq_size_level4"
+        android:layout_marginRight="@dimen/mq_size_level4"
+        android:src="@mipmap/chat_white"
+        app:badge_dragable="true"
+        app:badge_horizontalMargin="0dp"
+        app:badge_padding="6dp"
+        app:badge_textSize="12sp"
+        app:badge_verticalMargin="0dp"
+        app:borderWidth="@dimen/mq_size_level1"
+        app:fabSize="normal" />
+</android.support.design.widget.CoordinatorLayout>

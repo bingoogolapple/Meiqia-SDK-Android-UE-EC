@@ -26,6 +26,7 @@
         tools:replace="android:icon">
         <activity
             android:name=".ui.activity.MainActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTransTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,7 +35,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.DetailActivity" />
+        <activity
+            android:name=".ui.activity.DetailActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.activity.ChatActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name="com.xiaomi.push.service.XMPushService"

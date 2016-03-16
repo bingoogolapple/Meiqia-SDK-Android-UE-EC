@@ -6,7 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.meiqia.ue.ec.App;
-import com.meiqia.ue.ec.ui.activity.DetailActivity;
+import com.meiqia.ue.ec.ui.activity.ChatActivity;
 import com.xiaomi.mipush.sdk.ErrorCode;
 import com.xiaomi.mipush.sdk.MiPushClient;
 import com.xiaomi.mipush.sdk.MiPushCommandMessage;
@@ -52,7 +52,7 @@ public class XiaomiReceiver extends PushMessageReceiver {
             mAlias = message.getAlias();
         }
 
-        Intent intent = new Intent(context, DetailActivity.class);
+        Intent intent = ChatActivity.newIntent(context, true);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }

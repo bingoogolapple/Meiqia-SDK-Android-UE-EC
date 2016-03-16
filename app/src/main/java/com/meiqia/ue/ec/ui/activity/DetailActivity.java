@@ -12,14 +12,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.meiqia.core.MQMessageManager;
-import com.meiqia.meiqiasdk.activity.MQConversationActivity;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
+import com.meiqia.ue.ec.ui.widget.BadgeFloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.bingoogolapple.badgeview.BGABadgeTextView;
 import cn.bingoogolapple.badgeview.BGABadgeable;
 import cn.bingoogolapple.badgeview.BGADragDismissDelegate;
 import cn.bingoogolapple.bgabanner.BGABanner;
@@ -33,13 +32,13 @@ import pub.devrel.easypermissions.EasyPermissions;
  */
 public class DetailActivity extends ToolbarActivity implements EasyPermissions.PermissionCallbacks {
     private static final int REQUEST_CODE_CONVERSATION_PERMISSIONS = 1;
-    private BGABadgeTextView mChatBtv;
+    private BadgeFloatingActionButton mChatBfab;
     private int mMessageCount;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_detail);
-        mChatBtv = getViewById(R.id.btv_main_chat);
+        mChatBfab = getViewById(R.id.bfab_detail_chat);
         initBanner();
     }
 
@@ -63,9 +62,8 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
 
     @Override
     protected void setListener() {
-        mChatBtv.setOnClickListener(this);
-
-        mChatBtv.setDragDismissDelegage(new BGADragDismissDelegate() {
+        mChatBfab.setOnClickListener(this);
+        mChatBfab.setDragDismissDelegage(new BGADragDismissDelegate() {
             @Override
             public void onDismiss(BGABadgeable badgeable) {
                 clearMessage();
@@ -80,12 +78,12 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
 
     private void clearMessage() {
         mMessageCount = 0;
-        mChatBtv.hiddenBadge();
+        mChatBfab.hiddenBadge();
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btv_main_chat) {
+        if (v.getId() == R.id.bfab_detail_chat) {
             conversationWrapper();
         }
     }
@@ -98,7 +96,7 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
             clearMessage();
             unRegisterMessageReceiver();
 
-            startActivity(new Intent(DetailActivity.this, MQConversationActivity.class));
+            forward(ChatActivity.class);
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.mq_runtime_permission_tip), REQUEST_CODE_CONVERSATION_PERMISSIONS, perms);
         }
@@ -143,7 +141,7 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
         public void onReceive(Context context, Intent intent) {
             if (MQMessageManager.ACTION_NEW_MESSAGE_RECEIVED.equals(intent.getAction())) {
                 mMessageCount++;
-                mChatBtv.showTextBadge(mMessageCount > 99 ? "99+" : String.valueOf(mMessageCount));
+                mChatBfab.showTextBadge(mMessageCount > 99 ? "99+" : String.valueOf(mMessageCount));
             }
         }
     };

@@ -14,6 +14,6 @@ import rx.Observable;
  */
 public interface Engine {
 
-    @GET("test_api.json")
+    @GET("test_api1.json")
     Observable<List<GoodsModel>> loadBeforeGoods();
 }

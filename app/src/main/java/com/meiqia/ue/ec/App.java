@@ -13,6 +13,7 @@ import com.meiqia.core.callback.OnClientInfoCallback;
 import com.meiqia.core.callback.OnInitCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
 import com.meiqia.meiqiasdk.util.MQUtils;
+import com.meiqia.ue.ec.engine.Engine;
 import com.meiqia.ue.ec.util.Constants;
 import com.meiqia.ue.ec.util.SimpleActivityLifecycleCallbacks;
 import com.squareup.leakcanary.LeakCanary;
@@ -26,6 +27,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
  * 创建时间:16/3/7 下午3:21
@@ -37,6 +42,7 @@ public class App extends Application {
     private long mLastPressBackKeyTime;
     private LinkedList<Activity> mActivities = new LinkedList<>();
     private RefWatcher mRefWatcher;
+    private Engine mEngine;
 
     private static final int BACKGROUND = 0;
     private int mActivityState = BACKGROUND;
@@ -51,6 +57,20 @@ public class App extends Application {
         initMeiqiaSDK();
         initMiPush();
         listenActivityLifecycle();
+
+        initEngine();
+    }
+
+    private void initEngine() {
+        mEngine = new Retrofit.Builder()
+                .baseUrl("https://github.com/bingoogolapple/Meiqia-SDK-Android-UE-EC/blob/master/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build().create(Engine.class);
+    }
+
+    public Engine getEngine() {
+        return mEngine;
     }
 
     private void initMeiqiaSDK() {

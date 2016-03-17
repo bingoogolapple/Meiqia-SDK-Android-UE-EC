@@ -4,4 +4,4 @@
 [MeiqiaSDK-Android](https://github.com/Meiqia/MeiqiaSDK-Android)
 
 ### 效果图
-![Image of RecyclerViewDemo](https://raw.githubusercontent.com/bingoogolapple/Meiqia-SDK-Android-UE-EC/master/screenshots/mq_ue_ec_demo.gif)
+![Image of RecyclerViewDemo](http://7xk9dj.com1.z0.glb.clouddn.com/mqueec/mq_ue_ec_demo.gif)

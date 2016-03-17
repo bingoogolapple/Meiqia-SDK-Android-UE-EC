@@ -15,4 +15,8 @@ public class Constants {
      */
     public static final String KEY_SDK_PUSH_PREF = "mi_";
     public static final String KEY_APP_NAME = "appName";
+
+
+    public static final String MQ_AGENT_ID_BEFORE = "990a7cbe603fe029e269b4c32f4fed09";
+    public static final String MQ_AGENT_ID_AFTER = "f12b03466611d678797c35fbfe27b7b2";
 }

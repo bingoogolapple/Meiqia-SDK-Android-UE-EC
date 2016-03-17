@@ -1,5 +1,6 @@
 package com.meiqia.ue.ec.ui.activity;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,21 +10,35 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.meiqia.core.MQManager;
+import com.meiqia.core.MQScheduleRule;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
-import com.meiqia.ue.ec.ui.fragment.AfterFragment;
-import com.meiqia.ue.ec.ui.fragment.BeforeFragment;
+import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
+import com.meiqia.ue.ec.ui.fragment.GoodsFragment;
 import com.meiqia.ue.ec.ui.widget.BadgeFloatingActionButton;
+import com.meiqia.ue.ec.util.Constants;
+import com.meiqia.ue.ec.util.RxBus;
+import com.trello.rxlifecycle.ActivityEvent;
+
+import java.util.List;
 
 import cn.bingoogolapple.badgeview.BGABadgeable;
 import cn.bingoogolapple.badgeview.BGADragDismissDelegate;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
  * 创建时间:16/3/15 下午10:47
  * 描述:
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
+    private static final int REQUEST_CODE_CONVERSATION_PERMISSIONS = 1;
+
     public static boolean sIsCreated = false;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
@@ -45,7 +60,7 @@ public class MainActivity extends BaseActivity {
         mChatBfab.setDragDismissDelegage(new BGADragDismissDelegate() {
             @Override
             public void onDismiss(BGABadgeable badgeable) {
-                MQUtils.show(mApp, "消失");
+                mApp.clearUnreadChatMessageCount();
             }
         });
     }
@@ -55,10 +70,37 @@ public class MainActivity extends BaseActivity {
         initToolbar();
         setUpTabLayoutAndViewPager();
 
-
-        mChatBfab.showTextBadge("3");
-
         sIsCreated = true;
+
+        observeUnreadChatMessage();
+    }
+
+    private void observeUnreadChatMessage() {
+        renderChatBfab();
+        RxBus.toObserverable()
+                .compose(bindUntilEvent(ActivityEvent.DESTROY))
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<Object, Boolean>() {
+                    @Override
+                    public Boolean call(Object object) {
+                        return object instanceof UnreadChatMessageEvent;
+                    }
+                })
+                .cast(UnreadChatMessageEvent.class)
+                .subscribe(new Action1<UnreadChatMessageEvent>() {
+                    @Override
+                    public void call(UnreadChatMessageEvent unreadChatMessageEvent) {
+                        renderChatBfab();
+                    }
+                });
+    }
+
+    private void renderChatBfab() {
+        if (mApp.getUnreadChatMessageCount() == 0) {
+            mChatBfab.hiddenBadge();
+        } else {
+            mChatBfab.showTextBadge(String.valueOf(mApp.getUnreadChatMessageCount()));
+        }
     }
 
     private void initToolbar() {
@@ -78,8 +120,37 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.bfab_main_chat) {
-            forward(ChatActivity.class);
+            conversationWrapper();
         }
+    }
+
+    @AfterPermissionGranted(REQUEST_CODE_CONVERSATION_PERMISSIONS)
+    private void conversationWrapper() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            // 如果当前未读消息条数为0，则请求分配售前客服。如果当前未读消息条数不为0，则分配默认的客服
+            if (mApp.getUnreadChatMessageCount() == 0) {
+                MQManager.getInstance(mApp).setScheduledAgentOrGroupWithId(Constants.MQ_AGENT_ID_BEFORE, "", MQScheduleRule.REDIRECT_GROUP);
+            }
+
+            forward(ChatActivity.class);
+        } else {
+            EasyPermissions.requestPermissions(this, getString(R.string.mq_runtime_permission_tip), REQUEST_CODE_CONVERSATION_PERMISSIONS, perms);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        MQUtils.show(this, R.string.mq_permission_denied_tip);
     }
 
     @Override
@@ -102,9 +173,9 @@ public class MainActivity extends BaseActivity {
         @Override
         public Fragment getItem(int position) {
             if (position == 0) {
-                return new BeforeFragment();
+                return GoodsFragment.newInstance(false);
             }
-            return new AfterFragment();
+            return GoodsFragment.newInstance(true);
         }
 
         @Override
@@ -114,7 +185,7 @@ public class MainActivity extends BaseActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return position == 0 ? "商品列表" : "已购商品";
+            return position == 0 ? getString(R.string.goods_list) : getString(R.string.after_sale_goods);
         }
     }
 }

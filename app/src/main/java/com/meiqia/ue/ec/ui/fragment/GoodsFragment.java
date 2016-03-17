@@ -6,14 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.meiqia.core.MQManager;
-import com.meiqia.core.MQScheduleRule;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.model.GoodsModel;
 import com.meiqia.ue.ec.ui.activity.DetailActivity;
 import com.meiqia.ue.ec.ui.adapter.GoodsAdapter;
 import com.meiqia.ue.ec.ui.widget.Divider;
+import com.meiqia.ue.ec.util.Constants;
 import com.trello.rxlifecycle.FragmentEvent;
 
 import java.util.List;
@@ -29,9 +28,19 @@ import rx.schedulers.Schedulers;
  * 创建时间:16/3/16 下午6:37
  * 描述:
  */
-public class BeforeFragment extends BaseFragment implements BGAOnRVItemClickListener {
+public class GoodsFragment extends BaseFragment implements BGAOnRVItemClickListener {
+    private static final String EXTRA_IS_AFTER_SALE = "EXTRA_IS_AFTER_SALE";
+
     private RecyclerView mGoodsRv;
     private GoodsAdapter mGoodsAdapter;
+
+    public static GoodsFragment newInstance(boolean isAfterSale) {
+        GoodsFragment goodsFragment = new GoodsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(EXTRA_IS_AFTER_SALE, isAfterSale);
+        goodsFragment.setArguments(bundle);
+        return goodsFragment;
+    }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -85,7 +94,11 @@ public class BeforeFragment extends BaseFragment implements BGAOnRVItemClickList
 
     @Override
     public void onRVItemClick(ViewGroup viewGroup, View view, int position) {
-        MQManager.getInstance(mApp).setScheduledAgentOrGroupWithId("990a7cbe603fe029e269b4c32f4fed09", "", MQScheduleRule.REDIRECT_GROUP);
-        mActivity.forward(DetailActivity.class);
+        String mqAgentId = Constants.MQ_AGENT_ID_BEFORE;
+        if (getArguments().getBoolean(EXTRA_IS_AFTER_SALE)) {
+            mqAgentId = Constants.MQ_AGENT_ID_AFTER;
+        }
+
+        mActivity.forward(DetailActivity.newIntent(mActivity, mqAgentId));
     }
 }

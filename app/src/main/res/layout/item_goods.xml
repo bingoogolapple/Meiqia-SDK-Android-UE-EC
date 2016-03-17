@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/MQMatchWrap"
+    android:background="@drawable/mq_selector_item_center"
+    android:padding="@dimen/mq_size_level4">
+
+    <ImageView
+        android:id="@+id/iv_item_goods_icon"
+        android:layout_width="60dp"
+        android:layout_height="85dp"
+        android:layout_marginRight="@dimen/mq_size_level3"
+        android:scaleType="centerCrop"
+        tools:src="@mipmap/holder" />
+
+    <TextView
+        android:id="@+id/tv_item_goods_title"
+        style="@style/MQMatchWrap"
+        android:layout_toRightOf="@id/iv_item_goods_icon"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/black_dark"
+        android:textSize="@dimen/mq_textSize_level2"
+        tools:text="未购商品未购商品未购商品未购商品未购商品未购商品未购商品未购商品未购商品" />
+
+
+    <TextView
+        android:id="@+id/tv_item_postage_and_address"
+        style="@style/MQMatchWrap"
+        android:layout_below="@id/tv_item_goods_title"
+        android:layout_marginTop="@dimen/mq_size_level2"
+        android:layout_toRightOf="@id/iv_item_goods_icon"
+        android:textColor="@color/black_middle"
+        android:textSize="@dimen/mq_textSize_level1"
+        tools:text="包邮     杭州" />
+
+    <TextView
+        android:id="@+id/tv_item_price"
+        style="@style/MQWrapWrap"
+        android:layout_alignBottom="@id/iv_item_goods_icon"
+        android:layout_marginTop="@dimen/mq_size_level2"
+        android:layout_toRightOf="@id/iv_item_goods_icon"
+        android:textColor="@color/red"
+        android:textSize="@dimen/mq_textSize_level1"
+        tools:text="¥88.8" />
+
+    <TextView
+        android:id="@+id/tv_item_sale_count"
+        style="@style/MQMatchWrap"
+        android:layout_alignBottom="@id/iv_item_goods_icon"
+        android:layout_marginLeft="@dimen/mq_size_level3"
+        android:layout_marginTop="@dimen/mq_size_level2"
+        android:layout_toRightOf="@id/tv_item_price"
+        android:textColor="@color/black_middle"
+        android:textSize="@dimen/mq_textSize_level1"
+        tools:text="99人付款" />
+
+
+</RelativeLayout>

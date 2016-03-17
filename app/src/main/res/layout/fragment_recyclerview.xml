@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rv_after_goods"
+    android:id="@+id/rv_recyclerview_content"
     style="@style/MQMatchMatch"
     android:overScrollMode="never" />

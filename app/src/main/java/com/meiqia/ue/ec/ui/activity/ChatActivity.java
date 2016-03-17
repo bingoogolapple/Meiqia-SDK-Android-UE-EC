@@ -1,7 +1,7 @@
 package com.meiqia.ue.ec.ui.activity;
 
-import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.meiqia.meiqiasdk.activity.MQConversationActivity;
 import com.meiqia.meiqiasdk.util.MQUtils;
@@ -13,23 +13,29 @@ import com.meiqia.ue.ec.R;
  * 描述:
  */
 public class ChatActivity extends MQConversationActivity {
-    private static final String EXTRA_IS_FROM_NOTIFICATION = "EXTRA_IS_FROM_NOTIFICATION";
+    public static boolean sIsCreated = false;
 
-    public static final Intent newIntent(Context context, boolean isFromNotification) {
-        Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(EXTRA_IS_FROM_NOTIFICATION, isFromNotification);
-        return intent;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sIsCreated = true;
     }
 
     @Override
     public void onBackPressed() {
         MQUtils.closeKeyboard(this);
 
-        if (getIntent().getBooleanExtra(EXTRA_IS_FROM_NOTIFICATION, false)) {
+        if (!MainActivity.sIsCreated) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
         finish();
         overridePendingTransition(R.anim.activity_backward_enter, R.anim.activity_backward_exit);
+    }
+
+    @Override
+    protected void onDestroy() {
+        sIsCreated = false;
+        super.onDestroy();
     }
 }

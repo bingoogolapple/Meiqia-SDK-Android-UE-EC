@@ -52,8 +52,11 @@ public class XiaomiReceiver extends PushMessageReceiver {
             mAlias = message.getAlias();
         }
 
-        Intent intent = ChatActivity.newIntent(context, true);
+        Intent intent = new Intent(context, ChatActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (ChatActivity.sIsCreated) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        }
         context.startActivity(intent);
     }
 

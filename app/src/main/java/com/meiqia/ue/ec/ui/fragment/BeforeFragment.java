@@ -12,14 +12,13 @@ import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.model.GoodsModel;
 import com.meiqia.ue.ec.ui.activity.DetailActivity;
+import com.meiqia.ue.ec.ui.adapter.GoodsAdapter;
 import com.meiqia.ue.ec.ui.widget.Divider;
 import com.trello.rxlifecycle.FragmentEvent;
 
 import java.util.List;
 
 import cn.bingoogolapple.androidcommon.adapter.BGAOnRVItemClickListener;
-import cn.bingoogolapple.androidcommon.adapter.BGARecyclerViewAdapter;
-import cn.bingoogolapple.androidcommon.adapter.BGAViewHolderHelper;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
@@ -36,8 +35,8 @@ public class BeforeFragment extends BaseFragment implements BGAOnRVItemClickList
 
     @Override
     protected void initView(Bundle savedInstanceState) {
-        setContentView(R.layout.fragment_before);
-        mGoodsRv = getViewById(R.id.rv_before_goods);
+        setContentView(R.layout.fragment_recyclerview);
+        mGoodsRv = getViewById(R.id.rv_recyclerview_content);
     }
 
     @Override
@@ -88,17 +87,5 @@ public class BeforeFragment extends BaseFragment implements BGAOnRVItemClickList
     public void onRVItemClick(ViewGroup viewGroup, View view, int position) {
         MQManager.getInstance(mApp).setScheduledAgentOrGroupWithId("990a7cbe603fe029e269b4c32f4fed09", "", MQScheduleRule.REDIRECT_GROUP);
         mActivity.forward(DetailActivity.class);
-    }
-
-    private static class GoodsAdapter extends BGARecyclerViewAdapter<GoodsModel> {
-
-        public GoodsAdapter(RecyclerView recyclerView) {
-            super(recyclerView, R.layout.item_before_goods);
-        }
-
-        @Override
-        protected void fillData(BGAViewHolderHelper helper, int position, GoodsModel model) {
-            helper.setText(R.id.tv_before_goods_title, model.title);
-        }
     }
 }

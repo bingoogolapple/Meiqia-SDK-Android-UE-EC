@@ -63,9 +63,9 @@ public class App extends Application {
 
     private void initEngine() {
         mEngine = new Retrofit.Builder()
-                .baseUrl("https://github.com/bingoogolapple/Meiqia-SDK-Android-UE-EC/blob/master/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://7xk9dj.com1.z0.glb.clouddn.com/")
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
                 .build().create(Engine.class);
     }
 

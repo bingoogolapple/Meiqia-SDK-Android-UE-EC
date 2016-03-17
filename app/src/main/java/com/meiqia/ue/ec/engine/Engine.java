@@ -14,6 +14,6 @@ import rx.Observable;
  */
 public interface Engine {
 
-    @GET("test_api1.json")
+    @GET("mqueec/test_api_v1.json")
     Observable<List<GoodsModel>> loadBeforeGoods();
 }

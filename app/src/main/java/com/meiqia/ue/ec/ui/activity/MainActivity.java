@@ -24,6 +24,7 @@ import cn.bingoogolapple.badgeview.BGADragDismissDelegate;
  * 描述:
  */
 public class MainActivity extends BaseActivity {
+    public static boolean sIsCreated = false;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -56,6 +57,8 @@ public class MainActivity extends BaseActivity {
 
 
         mChatBfab.showTextBadge("3");
+
+        sIsCreated = true;
     }
 
     private void initToolbar() {
@@ -82,6 +85,12 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         mApp.exitWithDoubleClick();
+    }
+
+    @Override
+    protected void onDestroy() {
+        sIsCreated = false;
+        super.onDestroy();
     }
 
     private class ContentPagerAdapter extends FragmentStatePagerAdapter {

@@ -25,10 +25,13 @@
                     android:padding="@dimen/mq_size_level3">
 
                     <TextView
+                        android:id="@+id/tv_detail_title"
                         style="@style/MQAutoWrap"
-                        android:text="正版包邮 重构 改善既有代码的设计 软件编程重构原理方法学 电脑软件项目开发"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题商品标题"
                         android:textColor="@color/black_dark"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/mq_textSize_level2" />
 
                     <View
                         style="@style/MQVLine"
@@ -41,7 +44,7 @@
                         android:paddingLeft="@dimen/mq_size_level2"
                         android:text="分享"
                         android:textColor="@color/black_middle"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/mq_textSize_level1" />
 
                 </LinearLayout>
 
@@ -54,9 +57,10 @@
                         style="@style/MQWrapWrap"
                         android:text="¥"
                         android:textColor="@color/red"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/mq_textSize_level1" />
 
                     <TextView
+                        android:id="@+id/tv_detail_price"
                         style="@style/MQWrapWrap"
                         android:layout_marginRight="@dimen/mq_size_level3"
                         android:text="52.00"
@@ -70,7 +74,7 @@
                         android:padding="2dp"
                         android:text="新春狂欢价"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/mq_textSize_level1" />
 
                     <TextView
                         style="@style/MQWrapWrap"
@@ -78,7 +82,7 @@
                         android:padding="2dp"
                         android:text="金币抵1%"
                         android:textColor="@android:color/white"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/mq_textSize_level1" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -89,22 +93,25 @@
                     android:paddingLeft="@dimen/mq_size_level3">
 
                     <TextView
+                        android:id="@+id/tv_detail_postage"
                         style="@style/MQAutoWrap"
                         android:text="快递:免运费"
                         android:textColor="@color/black_light"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/mq_textSize_level1" />
 
                     <TextView
+                        android:id="@+id/tv_detail_sale_count"
                         style="@style/MQAutoWrap"
                         android:text="月销量1942件"
                         android:textColor="@color/black_light"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/mq_textSize_level1" />
 
                     <TextView
+                        android:id="@+id/tv_detail_address"
                         style="@style/MQAutoWrap"
                         android:text="四川成都"
                         android:textColor="@color/black_light"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/mq_textSize_level1" />
                 </LinearLayout>
 
                 <View style="@style/MQHLine" />
@@ -112,103 +119,22 @@
                 <TextView
                     style="@style/MQMatchWrap"
                     android:padding="@dimen/mq_size_level3"
-                    android:text="图书详情"
+                    android:text="商品描述"
                     android:textColor="@color/red"
                     android:textSize="@dimen/mq_textSize_level2" />
 
                 <View style="@style/MQHLine" />
 
                 <TextView
-                    style="@style/MQMatchWrap"
-                    android:paddingBottom="@dimen/mq_size_level1"
-                    android:paddingLeft="@dimen/mq_size_level3"
-                    android:paddingTop="@dimen/mq_size_level1"
-                    android:text="编辑推荐"
-                    android:textColor="@color/orange"
-                    android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
-
-                <TextView
+                    android:id="@+id/tv_detail_desc"
                     style="@style/MQMatchWrap"
                     android:paddingBottom="@dimen/mq_size_level1"
                     android:paddingLeft="@dimen/mq_size_level3"
                     android:paddingRight="@dimen/mq_size_level3"
                     android:paddingTop="@dimen/mq_size_level1"
-                    android:text="@string/content_one"
+                    android:text="测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情测试详情"
                     android:textColor="@color/black_dark"
                     android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
-
-                <TextView
-                    style="@style/MQMatchWrap"
-                    android:paddingBottom="@dimen/mq_size_level1"
-                    android:paddingLeft="@dimen/mq_size_level3"
-                    android:paddingTop="@dimen/mq_size_level1"
-                    android:text="内容介绍"
-                    android:textColor="@color/orange"
-                    android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
-
-                <TextView
-                    style="@style/MQMatchWrap"
-                    android:paddingBottom="@dimen/mq_size_level1"
-                    android:paddingLeft="@dimen/mq_size_level3"
-                    android:paddingRight="@dimen/mq_size_level3"
-                    android:paddingTop="@dimen/mq_size_level1"
-                    android:text="@string/content_two"
-                    android:textColor="@color/black_dark"
-                    android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
-
-                <TextView
-                    style="@style/MQMatchWrap"
-                    android:paddingBottom="@dimen/mq_size_level1"
-                    android:paddingLeft="@dimen/mq_size_level3"
-                    android:paddingTop="@dimen/mq_size_level1"
-                    android:text="作者简介"
-                    android:textColor="@color/orange"
-                    android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
-
-                <TextView
-                    style="@style/MQMatchWrap"
-                    android:paddingBottom="@dimen/mq_size_level1"
-                    android:paddingLeft="@dimen/mq_size_level3"
-                    android:paddingRight="@dimen/mq_size_level3"
-                    android:paddingTop="@dimen/mq_size_level1"
-                    android:text="@string/content_three"
-                    android:textColor="@color/black_dark"
-                    android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
-
-                <TextView
-                    style="@style/MQMatchWrap"
-                    android:paddingBottom="@dimen/mq_size_level1"
-                    android:paddingLeft="@dimen/mq_size_level3"
-                    android:paddingTop="@dimen/mq_size_level1"
-                    android:text="目录"
-                    android:textColor="@color/orange"
-                    android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
-
-                <TextView
-                    style="@style/MQMatchWrap"
-                    android:paddingBottom="@dimen/mq_size_level1"
-                    android:paddingLeft="@dimen/mq_size_level3"
-                    android:paddingRight="@dimen/mq_size_level3"
-                    android:paddingTop="@dimen/mq_size_level1"
-                    android:text="@string/content_four"
-                    android:textColor="@color/black_dark"
-                    android:textSize="@dimen/mq_textSize_level1" />
-
-                <View style="@style/MQHLine" />
 
             </LinearLayout>
 
@@ -223,6 +149,7 @@
             <TextView
                 style="@style/MQWrapMatch"
                 android:background="@drawable/mq_selector_item_center"
+                android:clickable="true"
                 android:drawableTop="@mipmap/collect"
                 android:paddingBottom="@dimen/mq_size_level1"
                 android:paddingLeft="@dimen/mq_size_level4"

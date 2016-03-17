@@ -25,14 +25,13 @@ public class GoodsAdapter extends BGARecyclerViewAdapter<GoodsModel> {
     @Override
     protected void fillData(BGAViewHolderHelper helper, int position, GoodsModel model) {
         ImageView iconIv = helper.getImageView(R.id.iv_item_goods_icon);
-        Glide.with(mContext).load(model.small_icon).placeholder(R.mipmap.holder).into(iconIv);
+        Glide.with(mContext).load(model.small_icon).placeholder(R.mipmap.holder_list).into(iconIv);
 
         helper.setText(R.id.tv_item_goods_title, model.title);
         StringBuilder postageAndAddress = new StringBuilder();
         if (model.postage == 0) {
             postageAndAddress.append("包邮");
         } else {
-
             postageAndAddress.append("运费 ¥" + model.postage);
         }
         postageAndAddress.append("      " + model.address);

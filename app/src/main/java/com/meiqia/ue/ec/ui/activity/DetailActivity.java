@@ -4,15 +4,17 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.meiqia.core.MQManager;
 import com.meiqia.core.MQScheduleRule;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
+import com.meiqia.ue.ec.model.GoodsModel;
 import com.meiqia.ue.ec.ui.widget.BadgeFloatingActionButton;
 import com.meiqia.ue.ec.util.RxBus;
 import com.trello.rxlifecycle.ActivityEvent;
@@ -37,37 +39,38 @@ import rx.functions.Func1;
 public class DetailActivity extends ToolbarActivity implements EasyPermissions.PermissionCallbacks {
     private static final int REQUEST_CODE_CONVERSATION_PERMISSIONS = 1;
     private static final String EXTRA_MQ_AGENT_ID = "EXTRA_MQ_AGENT_ID";
+    private static final String EXTRA_GOODS = "EXTRA_GOODS";
+
+    private BGABanner mBanner;
+
+    private TextView mTitleTv;
+    private TextView mPriceTv;
+    private TextView mPostageTv;
+    private TextView mSaleCountTv;
+    private TextView mAddressTv;
+    private TextView mDescTv;
+
     private BadgeFloatingActionButton mChatBfab;
 
-    public static Intent newIntent(Context context, String mqAgentId) {
+    public static Intent newIntent(Context context, String mqAgentId, GoodsModel goodsModel) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(EXTRA_MQ_AGENT_ID, mqAgentId);
+        intent.putExtra(EXTRA_GOODS, goodsModel);
         return intent;
     }
 
     @Override
     protected void initView(Bundle savedInstanceState) {
         setContentView(R.layout.activity_detail);
+        mBanner = getViewById(R.id.banner);
+        mTitleTv = getViewById(R.id.tv_detail_title);
+        mPriceTv = getViewById(R.id.tv_detail_price);
+        mPostageTv = getViewById(R.id.tv_detail_postage);
+        mSaleCountTv = getViewById(R.id.tv_detail_sale_count);
+        mAddressTv = getViewById(R.id.tv_detail_address);
+        mDescTv = getViewById(R.id.tv_detail_desc);
+
         mChatBfab = getViewById(R.id.bfab_detail_chat);
-        initBanner();
-    }
-
-    private void initBanner() {
-        BGABanner banner = getViewById(R.id.banner);
-        List<View> views = new ArrayList<>();
-        views.add(getPageView(R.mipmap.one));
-        views.add(getPageView(R.mipmap.two));
-        views.add(getPageView(R.mipmap.three));
-        views.add(getPageView(R.mipmap.four));
-        views.add(getPageView(R.mipmap.five));
-        banner.setViews(views);
-    }
-
-    private View getPageView(@DrawableRes int resid) {
-        ImageView imageView = new ImageView(this);
-        imageView.setImageResource(resid);
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-        return imageView;
     }
 
     @Override
@@ -83,9 +86,34 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        setTitle("商品详情");
+        fillData();
 
         observeUnreadChatMessage();
+    }
+
+    private void fillData() {
+        setTitle("商品详情");
+        GoodsModel goodsModel = getIntent().getParcelableExtra(EXTRA_GOODS);
+
+        List<View> views = new ArrayList<>();
+        for (String icon : goodsModel.icons) {
+            views.add(getPageView(icon));
+        }
+        mBanner.setViews(views);
+
+        mTitleTv.setText(goodsModel.title);
+        mPriceTv.setText(String.valueOf(goodsModel.price));
+        mPostageTv.setText(goodsModel.postage == 0 ? "快递:包邮" : "快递:" + goodsModel.postage);
+        mSaleCountTv.setText("月销量" + goodsModel.sale_count + "件");
+        mAddressTv.setText(goodsModel.address);
+        mDescTv.setText(goodsModel.desc);
+    }
+
+    private View getPageView(String iconPath) {
+        ImageView imageView = new ImageView(this);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        Glide.with(this).load(iconPath).placeholder(R.mipmap.holder_banner).into(imageView);
+        return imageView;
     }
 
     private void observeUnreadChatMessage() {

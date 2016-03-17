@@ -11,7 +11,7 @@
         android:layout_height="85dp"
         android:layout_marginRight="@dimen/mq_size_level3"
         android:scaleType="centerCrop"
-        tools:src="@mipmap/holder" />
+        tools:src="@mipmap/holder_list" />
 
     <TextView
         android:id="@+id/tv_item_goods_title"

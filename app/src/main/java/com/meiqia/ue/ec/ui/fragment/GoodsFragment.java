@@ -99,6 +99,6 @@ public class GoodsFragment extends BaseFragment implements BGAOnRVItemClickListe
             mqAgentId = Constants.MQ_AGENT_ID_AFTER;
         }
 
-        mActivity.forward(DetailActivity.newIntent(mActivity, mqAgentId));
+        mActivity.forward(DetailActivity.newIntent(mActivity, mqAgentId, mGoodsAdapter.getItem(position)));
     }
 }

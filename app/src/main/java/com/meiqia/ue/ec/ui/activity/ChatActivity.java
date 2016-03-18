@@ -1,11 +1,13 @@
 package com.meiqia.ue.ec.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.meiqia.meiqiasdk.activity.MQConversationActivity;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
+import com.meiqia.ue.ec.util.SPUtil;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
@@ -14,6 +16,12 @@ import com.meiqia.ue.ec.R;
  */
 public class ChatActivity extends MQConversationActivity {
     public static boolean sIsCreated = false;
+
+    public static Intent newIntent(Context context) {
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra(CUSTOMIZED_ID, SPUtil.getCustomId());
+        return intent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

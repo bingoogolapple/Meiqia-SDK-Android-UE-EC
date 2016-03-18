@@ -27,7 +27,8 @@
         <activity
             android:name=".ui.activity.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTransTheme">
+            android:theme="@style/AppTransTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

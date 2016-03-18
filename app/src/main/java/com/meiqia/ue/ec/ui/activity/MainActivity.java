@@ -16,6 +16,7 @@ import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
 import com.meiqia.ue.ec.ui.fragment.GoodsFragment;
+import com.meiqia.ue.ec.ui.fragment.ProfileFragment;
 import com.meiqia.ue.ec.ui.widget.BadgeFloatingActionButton;
 import com.meiqia.ue.ec.util.Constants;
 import com.meiqia.ue.ec.util.RxBus;
@@ -133,7 +134,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 MQManager.getInstance(mApp).setScheduledAgentOrGroupWithId(Constants.MQ_AGENT_ID_BEFORE, "", MQScheduleRule.REDIRECT_GROUP);
             }
 
-            forward(ChatActivity.class);
+            forward(ChatActivity.newIntent(mApp));
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.mq_runtime_permission_tip), REQUEST_CODE_CONVERSATION_PERMISSIONS, perms);
         }
@@ -174,18 +175,26 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         public Fragment getItem(int position) {
             if (position == 0) {
                 return GoodsFragment.newInstance(false);
+            } else if (position == 1) {
+                return GoodsFragment.newInstance(true);
             }
-            return GoodsFragment.newInstance(true);
+            return new ProfileFragment();
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return position == 0 ? getString(R.string.goods_list) : getString(R.string.after_sale_goods);
+            if (position == 0) {
+                return getString(R.string.goods_list);
+            } else if (position == 1) {
+                return getString(R.string.after_sale_goods);
+            } else {
+                return getString(R.string.profile);
+            }
         }
     }
 }

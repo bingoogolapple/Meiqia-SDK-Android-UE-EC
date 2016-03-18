@@ -158,7 +158,7 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
             // 指定美洽客服id
             MQManager.getInstance(mApp).setScheduledAgentOrGroupWithId(getIntent().getStringExtra(EXTRA_MQ_AGENT_ID), "", MQScheduleRule.REDIRECT_GROUP);
 
-            forward(ChatActivity.class);
+            forward(ChatActivity.newIntent(mApp));
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.mq_runtime_permission_tip), REQUEST_CODE_CONVERSATION_PERMISSIONS, perms);
         }

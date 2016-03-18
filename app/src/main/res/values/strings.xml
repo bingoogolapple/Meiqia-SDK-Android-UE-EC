@@ -5,6 +5,8 @@
     <string name="loading_data_failure">数据加载失败</string>
     <string name="goods_list">商品列表</string>
     <string name="after_sale_goods">已购商品</string>
+    <string name="profile">个人主页</string>
+    <string name="complete">完成</string>
 
     <string name="content_one">
         软件开发的不朽经典\n
@@ -168,4 +170,5 @@
         要点列表 417\n
         索引 419\n
     </string>
+    <string name="done">完成</string>
 </resources>

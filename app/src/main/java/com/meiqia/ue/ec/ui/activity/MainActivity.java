@@ -11,7 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.meiqia.core.MQManager;
-import com.meiqia.core.MQScheduleRule;
+import com.meiqia.core.bean.MQAgent;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
@@ -130,11 +130,18 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
             // 如果当前未读消息条数为0，则请求分配售前客服。如果当前未读消息条数不为0，则分配默认的客服
-            if (mApp.getUnreadChatMessageCount() == 0) {
-                MQManager.getInstance(mApp).setScheduledAgentOrGroupWithId(Constants.MQ_AGENT_ID_BEFORE, "", MQScheduleRule.REDIRECT_GROUP);
+            String agentId = Constants.MQ_AGENT_ID_BEFORE;
+
+            if (mApp.getUnreadChatMessageCount() != 0) {
+                MQAgent agent = MQManager.getInstance(mApp).getCurrentAgent();
+                if (agent != null) {
+                    agentId = agent.getId();
+                } else {
+                    agentId = "";
+                }
             }
 
-            forward(ChatActivity.newIntent(mApp));
+            forward(ChatActivity.newIntent(mApp, agentId));
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.mq_runtime_permission_tip), REQUEST_CODE_CONVERSATION_PERMISSIONS, perms);
         }

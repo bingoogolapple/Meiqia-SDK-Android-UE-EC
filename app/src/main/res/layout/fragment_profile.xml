@@ -13,7 +13,7 @@
                 android:id="@+id/tiet_profile_id"
                 style="@style/MQMatchWrap"
                 android:hint="用户ID"
-                android:inputType="text"
+                android:inputType="number|text"
                 android:singleLine="true"
                 android:textSize="@dimen/mq_textSize_level2" />
 
@@ -42,6 +42,8 @@
                 android:id="@+id/tiet_profile_tel"
                 style="@style/MQMatchWrap"
                 android:hint="手机"
+                android:imeActionLabel="@string/done"
+                android:imeOptions="actionDone"
                 android:inputType="phone"
                 android:singleLine="true"
                 android:textSize="@dimen/mq_textSize_level2" />

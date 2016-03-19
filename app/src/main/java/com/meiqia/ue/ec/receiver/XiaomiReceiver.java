@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.meiqia.core.MQManager;
+import com.meiqia.core.bean.MQAgent;
 import com.meiqia.ue.ec.App;
 import com.meiqia.ue.ec.ui.activity.ChatActivity;
 import com.xiaomi.mipush.sdk.ErrorCode;
@@ -52,7 +54,13 @@ public class XiaomiReceiver extends PushMessageReceiver {
             mAlias = message.getAlias();
         }
 
-        Intent intent = ChatActivity.newIntent(context);
+        MQAgent agent = MQManager.getInstance(context).getCurrentAgent();
+        String agentId = "";
+        if (agent != null) {
+            agentId = agent.getId();
+        }
+
+        Intent intent = ChatActivity.newIntent(context, agentId);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (ChatActivity.sIsCreated) {
             intent.addFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);

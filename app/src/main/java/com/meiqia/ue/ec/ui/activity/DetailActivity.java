@@ -9,8 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.meiqia.core.MQManager;
-import com.meiqia.core.MQScheduleRule;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
@@ -155,10 +153,7 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
     private void conversationWrapper() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            // 指定美洽客服id
-            MQManager.getInstance(mApp).setScheduledAgentOrGroupWithId(getIntent().getStringExtra(EXTRA_MQ_AGENT_ID), "", MQScheduleRule.REDIRECT_GROUP);
-
-            forward(ChatActivity.newIntent(mApp));
+            forward(ChatActivity.newIntent(mApp, getIntent().getStringExtra(EXTRA_MQ_AGENT_ID)));
         } else {
             EasyPermissions.requestPermissions(this, getString(R.string.mq_runtime_permission_tip), REQUEST_CODE_CONVERSATION_PERMISSIONS, perms);
         }

@@ -83,7 +83,15 @@ public class App extends Application {
     }
 
     private void initMeiqiaSDK() {
-        initMQManager(null);
+        initMQManager(new OnInitCallback() {
+            @Override
+            public void onSuccess(String s) {
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+            }
+        });
         MQConfig.ui.backArrowIconResId = R.drawable.mq_ic_back_white;
         MQConfig.ui.titleGravity = MQConfig.ui.MQTitleGravity.LEFT;
     }

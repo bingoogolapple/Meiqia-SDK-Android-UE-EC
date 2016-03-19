@@ -4,16 +4,14 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
-import com.meiqia.core.MQManager;
-import com.meiqia.core.callback.OnClientInfoCallback;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.util.SPUtil;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
@@ -47,6 +45,17 @@ public class ProfileFragment extends BaseFragment {
     @Override
     protected void setListener() {
         setOnClickListener(R.id.btn_profile_done);
+
+        mTelTiet.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    submitCustomInfo();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -72,32 +81,24 @@ public class ProfileFragment extends BaseFragment {
         if (TextUtils.isEmpty(nickname)) {
             mNicknameTil.setError("昵称不能为空!");
             flag = false;
+        } else {
+            mNicknameTil.setErrorEnabled(false);
         }
 
         if (TextUtils.isEmpty(tel)) {
             mTelTil.setError("手机号不能为空!");
             flag = false;
+        } else {
+            mTelTil.setErrorEnabled(false);
         }
 
-        if (flag) {
-            final Map<String, String> info = new HashMap<>();
-            info.put("name", nickname);
-            info.put("avatar", "https://avatars2.githubusercontent.com/u/8949716?v=3&s=460");
-            info.put("tel", tel);
-            MQManager.getInstance(mApp).setClientInfo(info, new OnClientInfoCallback() {
-                @Override
-                public void onSuccess() {
-                    MQUtils.show(mApp, "设置自定义信息成功");
-                    SPUtil.setCustomId(id);
-                    SPUtil.setNickname(nickname);
-                    SPUtil.setTel(tel);
-                }
 
-                @Override
-                public void onFailure(int code, String msg) {
-                    MQUtils.show(mApp, "设置自定义信息失败!");
-                }
-            });
+        if (flag) {
+            SPUtil.setCustomId(id);
+            SPUtil.setNickname(nickname);
+            SPUtil.setTel(tel);
+
+            MQUtils.show(mApp, "保存成功，将在下一次打开对话时生效");
         }
     }
 }

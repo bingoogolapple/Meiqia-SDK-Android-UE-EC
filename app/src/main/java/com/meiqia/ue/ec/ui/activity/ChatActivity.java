@@ -4,10 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.meiqia.core.MQScheduleRule;
 import com.meiqia.meiqiasdk.activity.MQConversationActivity;
+import com.meiqia.meiqiasdk.util.MQIntentBuilder;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.util.SPUtil;
+
+import java.util.HashMap;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
@@ -17,10 +21,17 @@ import com.meiqia.ue.ec.util.SPUtil;
 public class ChatActivity extends MQConversationActivity {
     public static boolean sIsCreated = false;
 
-    public static Intent newIntent(Context context) {
-        Intent intent = new Intent(context, ChatActivity.class);
-        intent.putExtra(CUSTOMIZED_ID, SPUtil.getCustomId());
-        return intent;
+    public static Intent newIntent(Context context, String agentId) {
+        HashMap<String, String> clientInfo = new HashMap<>();
+        clientInfo.put("name", SPUtil.getNickname());
+        clientInfo.put("tel", SPUtil.getTel());
+
+        return new MQIntentBuilder(context, ChatActivity.class)
+                .setClientInfo(clientInfo)
+                .setCustomizedId(SPUtil.getCustomId())
+                .setScheduledAgent(agentId)
+                .setScheduleRule(MQScheduleRule.REDIRECT_GROUP)
+                .build();
     }
 
     @Override

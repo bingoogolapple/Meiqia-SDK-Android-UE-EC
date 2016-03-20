@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.os.Process;
 import android.support.v4.content.LocalBroadcastManager;
 
@@ -16,21 +15,19 @@ import com.meiqia.core.MQMessageManager;
 import com.meiqia.core.callback.OnClientInfoCallback;
 import com.meiqia.core.callback.OnInitCallback;
 import com.meiqia.meiqiasdk.util.MQConfig;
-import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.engine.Engine;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
 import com.meiqia.ue.ec.ui.activity.ChatActivity;
+import com.meiqia.ue.ec.util.AppManager;
 import com.meiqia.ue.ec.util.Constants;
 import com.meiqia.ue.ec.util.Logger;
 import com.meiqia.ue.ec.util.RxBus;
-import com.meiqia.ue.ec.util.SimpleActivityLifecycleCallbacks;
 import com.squareup.leakcanary.LeakCanary;
 import com.squareup.leakcanary.RefWatcher;
 import com.xiaomi.channel.commonutils.logger.LoggerInterface;
 import com.xiaomi.mipush.sdk.MiPushClient;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,14 +43,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class App extends Application {
     private static final String TAG = App.class.getSimpleName();
     private static App sInstance;
-    private long mLastPressBackKeyTime;
-    private LinkedList<Activity> mActivities = new LinkedList<>();
     private RefWatcher mRefWatcher;
     private Engine mEngine;
 
-    private int mActivityStartedCount = 0;
-
     private int mUnreadChatMessageCount;
+
+    private AppManager mAppManager;
 
 
     @Override
@@ -65,7 +60,7 @@ public class App extends Application {
 
         initMeiqiaSDK();
         initMiPush();
-        listenActivityLifecycle();
+        initAppManager();
 
         initEngine();
     }
@@ -138,15 +133,23 @@ public class App extends Application {
         return false;
     }
 
-    private void listenActivityLifecycle() {
-        registerActivityLifecycleCallbacks(new SimpleActivityLifecycleCallbacks() {
+    private void initAppManager() {
+        mAppManager = new AppManager(new AppManager.Delegate() {
+            @Override
+            public void onEnterFrontStage() {
+                Logger.i(TAG, "进入前台状态，开启美洽服务(关闭推送)");
+                openMeiqiaService();
+            }
+
+            @Override
+            public void onEnterBackStage() {
+                Logger.i(TAG, "进入后台状态，关闭美洽服务(开启推送)");
+                closeMeiqiaService();
+            }
+        }) {
             @Override
             public void onActivityStarted(Activity activity) {
-                if (mActivityStartedCount == 0) {
-                    Logger.i(TAG, "进入前台状态");
-                    openMeiqiaService();
-                }
-                mActivityStartedCount++;
+                super.onActivityStarted(activity);
 
                 // 处理离线消息广播接收者的注册与取消注册
                 if (activity instanceof ChatActivity) {
@@ -158,60 +161,20 @@ public class App extends Application {
                     LocalBroadcastManager.getInstance(sInstance).registerReceiver(mChatMessageReceiver, new IntentFilter(MQMessageManager.ACTION_NEW_MESSAGE_RECEIVED));
                 }
             }
-
-            @Override
-            public void onActivityStopped(Activity activity) {
-                mActivityStartedCount--;
-                if (mActivityStartedCount == 0) {
-                    Logger.i(TAG, "进入后台状态");
-                    closeMeiqiaService();
-                }
-            }
-
-            @Override
-            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
-                mActivities.add(activity);
-            }
-
-            @Override
-            public void onActivityDestroyed(Activity activity) {
-                mActivities.remove(activity);
-            }
-        });
+        };
+        registerActivityLifecycleCallbacks(mAppManager);
     }
 
     public static App getInstance() {
         return sInstance;
     }
 
-    public static RefWatcher getRefWatcher() {
-        return getInstance().mRefWatcher;
+    public RefWatcher getRefWatcher() {
+        return mRefWatcher;
     }
 
-    /**
-     * 双击后完全退出应用程序
-     */
-    public void exitWithDoubleClick() {
-        if (System.currentTimeMillis() - mLastPressBackKeyTime <= 1500) {
-            exit();
-        } else {
-            mLastPressBackKeyTime = System.currentTimeMillis();
-            MQUtils.show(this, R.string.toast_exit_tip);
-        }
-    }
-
-    /**
-     * 退出应用程序
-     */
-    public void exit() {
-        Activity activity;
-        while (mActivities.size() != 0) {
-            activity = mActivities.poll();
-            if (!activity.isFinishing()) {
-                activity.finish();
-            }
-        }
-        System.gc();
+    public AppManager getAppManager() {
+        return mAppManager;
     }
 
     private void closeMeiqiaService() {

@@ -163,7 +163,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Override
     public void onBackPressed() {
-        mApp.exitWithDoubleClick();
+        mApp.getAppManager().exitWithDoubleClick();
     }
 
     @Override

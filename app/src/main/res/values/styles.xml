@@ -16,11 +16,6 @@
         <item name="android:windowIsTranslucent">true</item>
     </style>
 
-    <style name="MQTheme" parent="AppTheme">
-        <item name="android:colorPrimaryDark" tools:targetApi="lollipop">@color/colorPrimaryDark
-        </item>
-    </style>
-
     <style name="BannerDefaultStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">150dp</item>

@@ -64,6 +64,13 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 mApp.clearUnreadChatMessageCount();
             }
         });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                mChatBfab.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
+            }
+        });
     }
 
     @Override
@@ -114,7 +121,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         ContentPagerAdapter contentPagerAdapter = new ContentPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(contentPagerAdapter);
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
-        mTabLayout.setTabsFromPagerAdapter(contentPagerAdapter);
+        mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
@@ -129,9 +136,13 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
     private void conversationWrapper() {
         String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO};
         if (EasyPermissions.hasPermissions(this, perms)) {
-            // 如果当前未读消息条数为0，则请求分配售前客服。如果当前未读消息条数不为0，则分配默认的客服
-            String agentId = Constants.MQ_AGENT_ID_BEFORE;
 
+            String agentId = Constants.MQ_AGENT_ID_BEFORE;
+            if (mViewPager.getCurrentItem() == 1) {
+                agentId = Constants.MQ_AGENT_ID_AFTER;
+            }
+
+            // 如果当前未读消息条数为0，则请求分配当前界面商品对应的客服。如果当前未读消息条数不为0，则分配默认的客服
             if (mApp.getUnreadChatMessageCount() != 0) {
                 MQAgent agent = MQManager.getInstance(mApp).getCurrentAgent();
                 if (agent != null) {

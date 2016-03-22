@@ -1,5 +1,7 @@
 package com.meiqia.ue.ec.ui.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -9,9 +11,13 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.meiqia.meiqiasdk.activity.MQPhotoPickerActivity;
 import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.util.SPUtil;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 作者:王浩 邮件:bingoogolapple@gmail.com
@@ -19,6 +25,10 @@ import com.meiqia.ue.ec.util.SPUtil;
  * 描述:
  */
 public class ProfileFragment extends BaseFragment {
+    private static final int REQUEST_CODE_CHOOSE_PHOTO = 1;
+
+    private CircleImageView mAvatarCiv;
+
     private TextInputLayout mIdTil;
     private TextInputEditText mIdTiet;
 
@@ -32,6 +42,8 @@ public class ProfileFragment extends BaseFragment {
     protected void initView(Bundle savedInstanceState) {
         setContentView(R.layout.fragment_profile);
 
+        mAvatarCiv = getViewById(R.id.civ_profile_avatar);
+
         mIdTil = getViewById(R.id.til_profile_id);
         mIdTiet = getViewById(R.id.tiet_profile_id);
 
@@ -44,6 +56,8 @@ public class ProfileFragment extends BaseFragment {
 
     @Override
     protected void setListener() {
+        mAvatarCiv.setOnClickListener(this);
+
         setOnClickListener(R.id.btn_profile_done);
 
         mTelTiet.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -63,13 +77,28 @@ public class ProfileFragment extends BaseFragment {
         mIdTiet.setText(SPUtil.getCustomId());
         mNicknameTiet.setText(SPUtil.getNickname());
         mTelTiet.setText(SPUtil.getTel());
+
+
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.btn_profile_done) {
+        if (v.getId() == R.id.civ_profile_avatar) {
+            startActivityForResult(MQPhotoPickerActivity.newIntent(mActivity, null, 1, null, getString(R.string.mq_confirm)), REQUEST_CODE_CHOOSE_PHOTO);
+        } else if (v.getId() == R.id.btn_profile_done) {
             submitCustomInfo();
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_CHOOSE_PHOTO) {
+            String avatar = MQPhotoPickerActivity.getSelectedImages(data).get(0);
+
+            Glide.with(this).load("file://" + avatar).into(mAvatarCiv);
+        }
+
     }
 
     private void submitCustomInfo() {

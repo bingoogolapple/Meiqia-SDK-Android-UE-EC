@@ -147,8 +147,6 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
                 MQAgent agent = MQManager.getInstance(mApp).getCurrentAgent();
                 if (agent != null) {
                     agentId = agent.getId();
-                } else {
-                    agentId = "";
                 }
             }
 

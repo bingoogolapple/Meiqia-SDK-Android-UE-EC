@@ -55,6 +55,7 @@ dependencies {
     releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
 
     // ----------------- 美洽 START -----------------
+    compile(name: 'meiqia-release', ext: 'aar')
     compile(name: 'meiqiasdk-release', ext: 'aar')
 
 //    compile 'com.meiqia:meiqiasdk:3.1.3@aar'

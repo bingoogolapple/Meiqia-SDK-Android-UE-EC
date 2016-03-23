@@ -83,6 +83,7 @@ public class App extends Application {
         initMQManager(new OnInitCallback() {
             @Override
             public void onSuccess(String s) {
+                refreshUnreadChatMessageCount();
             }
 
             @Override
@@ -229,27 +230,30 @@ public class App extends Application {
         return mUnreadChatMessageCount;
     }
 
+    private void refreshUnreadChatMessageCount() {
+        MQManager.getInstance(this).getUnreadMessages(new OnGetMessageListCallback() {
+            @Override
+            public void onSuccess(List<MQMessage> messageList) {
+                mUnreadChatMessageCount = messageList.size();
+
+                Logger.i(TAG, "收到新消息 " + mUnreadChatMessageCount);
+
+                RxBus.send(new UnreadChatMessageEvent());
+            }
+
+            @Override
+            public void onFailure(int code, String message) {
+                Logger.d(TAG, "获取未读消息失败 " + message);
+            }
+        });
+    }
+
     private BroadcastReceiver mChatMessageReceiver = new BroadcastReceiver() {
 
         @Override
         public void onReceive(Context context, Intent intent) {
             if (MQMessageManager.ACTION_NEW_MESSAGE_RECEIVED.equals(intent.getAction())) {
-
-                MQManager.getInstance(context).getUnreadMessages(new OnGetMessageListCallback() {
-                    @Override
-                    public void onSuccess(List<MQMessage> messageList) {
-                        mUnreadChatMessageCount = messageList.size();
-
-                        Logger.i(TAG, "收到新消息 " + mUnreadChatMessageCount);
-
-                        RxBus.send(new UnreadChatMessageEvent());
-                    }
-
-                    @Override
-                    public void onFailure(int code, String message) {
-                        Logger.d(TAG, "获取未读消息失败 " + message);
-                    }
-                });
+                refreshUnreadChatMessageCount();
             }
         }
     };

@@ -6,13 +6,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.model.GoodsModel;
 import com.meiqia.ue.ec.ui.activity.DetailActivity;
 import com.meiqia.ue.ec.ui.adapter.GoodsAdapter;
 import com.meiqia.ue.ec.ui.widget.Divider;
 import com.meiqia.ue.ec.util.Constants;
+import com.meiqia.ue.ec.util.SweetAlertDialogUtil;
 import com.trello.rxlifecycle.FragmentEvent;
 
 import java.util.List;
@@ -59,8 +59,13 @@ public class GoodsFragment extends BaseFragment implements BGAOnRVItemClickListe
         mGoodsRv.setLayoutManager(new LinearLayoutManager(mApp));
         mGoodsRv.addItemDecoration(new Divider(mApp));
         mGoodsRv.setAdapter(mGoodsAdapter);
+    }
 
-        loadDatas();
+    @Override
+    public void onUserVisible() {
+        if (mGoodsAdapter == null || mGoodsAdapter.getDatas().size() == 0) {
+            loadDatas();
+        }
     }
 
     private void loadDatas() {
@@ -86,8 +91,7 @@ public class GoodsFragment extends BaseFragment implements BGAOnRVItemClickListe
                     @Override
                     public void call(Throwable throwable) {
                         mActivity.dismissLoadingDialog();
-
-                        MQUtils.show(mApp, R.string.loading_data_failure);
+                        SweetAlertDialogUtil.showWarning(mActivity, "数据加载失败", throwable.getMessage());
                     }
                 });
     }

@@ -3,6 +3,7 @@ package com.meiqia.ue.ec.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 
 import com.meiqia.core.MQScheduleRule;
 import com.meiqia.meiqiasdk.activity.MQConversationActivity;
@@ -25,6 +26,10 @@ public class ChatActivity extends MQConversationActivity {
         HashMap<String, String> clientInfo = new HashMap<>();
         clientInfo.put("name", SPUtil.getNickname());
         clientInfo.put("tel", SPUtil.getTel());
+
+        if (!TextUtils.isEmpty(SPUtil.getAvatar())) {
+            clientInfo.put("avatar", SPUtil.getAvatar());
+        }
 
         return new MQIntentBuilder(context, ChatActivity.class)
                 .setClientInfo(clientInfo)

@@ -9,12 +9,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
 import com.meiqia.ue.ec.model.GoodsModel;
 import com.meiqia.ue.ec.ui.widget.BadgeFloatingActionButton;
 import com.meiqia.ue.ec.util.RxBus;
+import com.meiqia.ue.ec.util.SweetAlertDialogUtil;
 import com.trello.rxlifecycle.ActivityEvent;
 
 import java.util.ArrayList;
@@ -170,6 +170,6 @@ public class DetailActivity extends ToolbarActivity implements EasyPermissions.P
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        MQUtils.show(this, R.string.mq_permission_denied_tip);
+        SweetAlertDialogUtil.showWarning(this, "提示", getString(R.string.mq_permission_denied_tip));
     }
 }

@@ -6,6 +6,7 @@ package com.meiqia.ue.ec.util;
  * 描述:
  */
 public class Constants {
+    // -------------------------- 推送 START --------------------------
     /**
      * 上传推送的push id
      */
@@ -15,8 +16,16 @@ public class Constants {
      */
     public static final String KEY_SDK_PUSH_PREF = "mi_";
     public static final String KEY_APP_NAME = "appName";
+    // -------------------------- 推送 END --------------------------
 
-
+    // 售前客服 ID
     public static final String MQ_AGENT_ID_BEFORE = "990a7cbe603fe029e269b4c32f4fed09";
+    // 售后客服 ID
     public static final String MQ_AGENT_ID_AFTER = "f12b03466611d678797c35fbfe27b7b2";
+
+    // -------------------------- 七牛云存储相关 START --------------------------
+    public static final String QN_ACCESS_KEY = "";
+    public static final String QN_SECRET_KEY = "";
+    public static final String QN_BUCKET_NAME = "";
+    // -------------------------- 七牛云存储相关 END --------------------------
 }

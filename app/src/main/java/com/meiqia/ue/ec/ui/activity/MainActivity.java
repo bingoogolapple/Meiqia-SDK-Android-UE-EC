@@ -12,7 +12,6 @@ import android.view.View;
 
 import com.meiqia.core.MQManager;
 import com.meiqia.core.bean.MQAgent;
-import com.meiqia.meiqiasdk.util.MQUtils;
 import com.meiqia.ue.ec.R;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
 import com.meiqia.ue.ec.ui.fragment.GoodsFragment;
@@ -20,6 +19,7 @@ import com.meiqia.ue.ec.ui.fragment.ProfileFragment;
 import com.meiqia.ue.ec.ui.widget.BadgeFloatingActionButton;
 import com.meiqia.ue.ec.util.Constants;
 import com.meiqia.ue.ec.util.RxBus;
+import com.meiqia.ue.ec.util.SweetAlertDialogUtil;
 import com.trello.rxlifecycle.ActivityEvent;
 
 import java.util.List;
@@ -167,7 +167,7 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        MQUtils.show(this, R.string.mq_permission_denied_tip);
+        SweetAlertDialogUtil.showWarning(this, "提示", getString(R.string.mq_permission_denied_tip));
     }
 
     @Override

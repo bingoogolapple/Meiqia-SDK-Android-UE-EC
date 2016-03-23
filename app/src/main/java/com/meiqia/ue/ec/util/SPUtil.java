@@ -95,4 +95,20 @@ public class SPUtil {
     public static void setTel(String tel) {
         putString("tel", tel);
     }
+
+    public static String getAvatar() {
+        return getString("avatar");
+    }
+
+    public static void setAvatar(String avatar) {
+        putString("avatar", avatar);
+    }
+
+    public static String getLocalAvatar() {
+        return getString("local_avatar");
+    }
+
+    public static void setLocalAvatar(String avatar) {
+        putString("local_avatar", avatar);
+    }
 }

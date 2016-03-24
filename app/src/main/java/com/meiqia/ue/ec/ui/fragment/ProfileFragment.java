@@ -240,8 +240,8 @@ public class ProfileFragment extends BaseFragment {
 
                         // 删除之前本地缓存的头像
                         String localAvatar = SPUtil.getLocalAvatar();
-                        if (!TextUtils.isEmpty(localAvatar)) {
-                            new File(localAvatar).deleteOnExit();
+                        if (!TextUtils.isEmpty(localAvatar) && new File(localAvatar).exists()) {
+                            new File(localAvatar).delete();
                         }
                         // 通知图库更新
                         mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(mNewAvatarFile)));
@@ -253,7 +253,7 @@ public class ProfileFragment extends BaseFragment {
                         mActivity.dismissLoadingDialog();
 
                         if (mNewAvatarFile != null && mNewAvatarFile.exists()) {
-                            mNewAvatarFile.deleteOnExit();
+                            mNewAvatarFile.delete();
                         }
 
                         loadAvatar();
@@ -268,8 +268,9 @@ public class ProfileFragment extends BaseFragment {
             @Override
             public void call(Subscriber<? super File> subscriber) {
                 FileOutputStream fos = null;
+                File file = null;
                 try {
-                    File file = new File(StorageUtil.getImageDir(), "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".png");
+                    file = new File(StorageUtil.getImageDir(), "IMG_" + new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()) + ".png");
                     fos = new FileOutputStream(file);
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
                     fos.flush();
@@ -277,6 +278,9 @@ public class ProfileFragment extends BaseFragment {
                     subscriber.onNext(file);
                     subscriber.onCompleted();
                 } catch (IOException e) {
+                    if (file != null && file.exists()) {
+                        file.delete();
+                    }
                     subscriber.onError(e);
                 } finally {
                     if (fos != null) {

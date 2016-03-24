@@ -30,10 +30,10 @@
 ```
 
 ### 相关连接
-[美洽官网地址](http://meiqia.com)
-[美洽工作台地址](http://app.meiqia.com)
-[美洽 Android SDK 源码仓库地址](https://github.com/Meiqia/MeiqiaSDK-Android)
-[美洽 SDK 用户体验案例 - 游戏](https://github.com/ksxkq/MQGameDemo)
+* [美洽官网地址](http://meiqia.com)
+* [美洽工作台地址](http://app.meiqia.com)
+* [美洽 Android SDK 源码仓库地址](https://github.com/Meiqia/MeiqiaSDK-Android)
+* [美洽 SDK 用户体验案例 - 游戏](https://github.com/ksxkq/MQGameDemo)
 
 ### 效果图
 ![Image of Demo](http://7xk9dj.com1.z0.glb.clouddn.com/mqueec/v11.jpg?imageView2/2/w/320/h/480)

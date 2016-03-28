@@ -20,6 +20,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.meiqia.meiqiasdk.activity.MQPhotoPickerActivity;
 import com.meiqia.ue.ec.R;
+import com.meiqia.ue.ec.ui.activity.MainActivity;
 import com.meiqia.ue.ec.util.QiniuUtil;
 import com.meiqia.ue.ec.util.SPUtil;
 import com.meiqia.ue.ec.util.StorageUtil;
@@ -135,10 +136,14 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.civ_profile_avatar) {
-            startActivityForResult(MQPhotoPickerActivity.newIntent(mActivity, null, 1, null, getString(R.string.mq_confirm)), REQUEST_CODE_CHOOSE_PHOTO);
+            ((MainActivity) mActivity).photoPickerWrapper();
         } else if (v.getId() == R.id.btn_profile_done) {
             submitCustomInfo();
         }
+    }
+
+    public void chooseAvatarFromPhotoPicker() {
+        startActivityForResult(MQPhotoPickerActivity.newIntent(mActivity, null, 1, null, getString(R.string.mq_confirm)), REQUEST_CODE_CHOOSE_PHOTO);
     }
 
     @Override

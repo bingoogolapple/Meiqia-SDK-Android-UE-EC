@@ -39,12 +39,14 @@ import rx.functions.Func1;
  */
 public class MainActivity extends BaseActivity implements EasyPermissions.PermissionCallbacks {
     private static final int REQUEST_CODE_CONVERSATION_PERMISSIONS = 1;
+    private static final int REQUEST_CODE_UPDATE_AVATAR_PERMISSION = 2;
 
     public static boolean sIsCreated = false;
     private Toolbar mToolbar;
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private BadgeFloatingActionButton mChatBfab;
+    private ProfileFragment mProfileFragment;
 
     @Override
     protected void initView(Bundle savedInstanceState) {
@@ -156,6 +158,18 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
         }
     }
 
+    @AfterPermissionGranted(REQUEST_CODE_UPDATE_AVATAR_PERMISSION)
+    public void photoPickerWrapper() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(mApp, perms)) {
+            if (mProfileFragment != null) {
+                mProfileFragment.chooseAvatarFromPhotoPicker();
+            }
+        } else {
+            EasyPermissions.requestPermissions(this, "修改头像需要访问设备上SD卡的权限", REQUEST_CODE_UPDATE_AVATAR_PERMISSION, perms);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
@@ -167,7 +181,11 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
 
     @Override
     public void onPermissionsDenied(int requestCode, List<String> perms) {
-        SweetAlertDialogUtil.showWarning(this, "提示", getString(R.string.mq_permission_denied_tip));
+        if (requestCode == REQUEST_CODE_CONVERSATION_PERMISSIONS) {
+            SweetAlertDialogUtil.showWarning(this, "提示", getString(R.string.mq_permission_denied_tip));
+        } else if (requestCode == REQUEST_CODE_UPDATE_AVATAR_PERMISSION) {
+            SweetAlertDialogUtil.showWarning(this, "提示", "您拒绝了访问设备上SD卡的权限");
+        }
     }
 
     @Override
@@ -194,7 +212,9 @@ public class MainActivity extends BaseActivity implements EasyPermissions.Permis
             } else if (position == 1) {
                 return GoodsFragment.newInstance(true);
             }
-            return new ProfileFragment();
+
+            mProfileFragment = new ProfileFragment();
+            return mProfileFragment;
         }
 
         @Override

@@ -224,11 +224,17 @@ public class App extends Application {
 
     public void clearUnreadChatMessageCount() {
         mUnreadChatMessageCount = 0;
-        RxBus.send(new UnreadChatMessageEvent());
+        sendUnreadChatMessageEvent();
     }
 
     public int getUnreadChatMessageCount() {
         return mUnreadChatMessageCount;
+    }
+
+    private void sendUnreadChatMessageEvent() {
+        if (RxBus.hasObservers()) {
+            RxBus.send(new UnreadChatMessageEvent());
+        }
     }
 
     private void refreshUnreadChatMessageCount() {
@@ -239,7 +245,7 @@ public class App extends Application {
 
                 Logger.i(TAG, "收到新消息 " + mUnreadChatMessageCount);
 
-                RxBus.send(new UnreadChatMessageEvent());
+                sendUnreadChatMessageEvent();
             }
 
             @Override

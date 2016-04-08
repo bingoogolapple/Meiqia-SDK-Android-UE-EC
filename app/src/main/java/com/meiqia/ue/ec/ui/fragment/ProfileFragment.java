@@ -1,5 +1,6 @@
 package com.meiqia.ue.ec.ui.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,7 +21,6 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.meiqia.meiqiasdk.activity.MQPhotoPickerActivity;
 import com.meiqia.ue.ec.R;
-import com.meiqia.ue.ec.ui.activity.MainActivity;
 import com.meiqia.ue.ec.util.QiniuUtil;
 import com.meiqia.ue.ec.util.SPUtil;
 import com.meiqia.ue.ec.util.StorageUtil;
@@ -33,8 +33,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.EasyPermissions;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -47,9 +50,11 @@ import rx.schedulers.Schedulers;
  * 创建时间:16/3/18 上午12:39
  * 描述:
  */
-public class ProfileFragment extends BaseFragment {
+public class ProfileFragment extends BaseFragment implements EasyPermissions.PermissionCallbacks {
     private static final int REQUEST_CODE_CHOOSE_PHOTO = 1;
     private static final int REQUEST_CODE_CROP = 2;
+
+    private static final int REQUEST_CODE_UPDATE_AVATAR_PERMISSION = 1;
 
     private CircleImageView mAvatarCiv;
 
@@ -136,14 +141,36 @@ public class ProfileFragment extends BaseFragment {
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.civ_profile_avatar) {
-            ((MainActivity) mActivity).photoPickerWrapper();
+            photoPickerWrapper();
         } else if (v.getId() == R.id.btn_profile_done) {
             submitCustomInfo();
         }
     }
 
-    public void chooseAvatarFromPhotoPicker() {
-        startActivityForResult(MQPhotoPickerActivity.newIntent(mActivity, null, 1, null, getString(R.string.mq_confirm)), REQUEST_CODE_CHOOSE_PHOTO);
+    @AfterPermissionGranted(REQUEST_CODE_UPDATE_AVATAR_PERMISSION)
+    public void photoPickerWrapper() {
+        String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (EasyPermissions.hasPermissions(mApp, perms)) {
+            startActivityForResult(MQPhotoPickerActivity.newIntent(mActivity, null, 1, null, getString(R.string.mq_confirm)), REQUEST_CODE_CHOOSE_PHOTO);
+        } else {
+            EasyPermissions.requestPermissions(this, "修改头像需要访问设备上SD卡的权限", REQUEST_CODE_UPDATE_AVATAR_PERMISSION, perms);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (requestCode == REQUEST_CODE_UPDATE_AVATAR_PERMISSION) {
+            SweetAlertDialogUtil.showWarning(mActivity, "提示", "您拒绝了访问设备上SD卡的权限");
+        }
     }
 
     @Override

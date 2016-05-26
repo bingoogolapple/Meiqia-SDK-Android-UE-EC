@@ -98,7 +98,8 @@ public class App extends Application {
     }
 
     private void initMQManager(OnInitCallback onInitCallback) {
-        MQConfig.init(this, "55b1b546b06656d9b930deeef07cdc1a", new GlideImageloader(), onInitCallback);
+        // 55b1b546b06656d9b930deeef07cdc1a
+        MQConfig.init(this, "8896c195558f2e25d5cdd2e586098ef7", new GlideImageloader(), onInitCallback);
     }
 
     private void initMiPush() {

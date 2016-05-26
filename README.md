@@ -15,20 +15,6 @@
 
 ![apk文件二维码](https://o1wjx1evz.qnssl.com/app/qrcode/MQUEEC)
 
-### 工作台账号
-> 售前客服
-
-```
-账号：mq_test_pre_sale@sina.com
-工作台密码：mq_test_pre_sale
-```
-> 售后客服
-
-```
-账号：mq_test_aft_sale@sina.com
-工作台密码：mq_test_aft_sale
-```
-
 ### 相关连接
 * [美洽官网地址](http://meiqia.com)
 * [美洽工作台地址](http://app.meiqia.com)

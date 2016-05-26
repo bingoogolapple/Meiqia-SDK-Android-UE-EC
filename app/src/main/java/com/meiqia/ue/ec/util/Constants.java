@@ -19,9 +19,11 @@ public class Constants {
     // -------------------------- 推送 END --------------------------
 
     // 售前客服 ID
-    public static final String MQ_AGENT_ID_BEFORE = "990a7cbe603fe029e269b4c32f4fed09";
+//    public static final String MQ_AGENT_ID_BEFORE = "990a7cbe603fe029e269b4c32f4fed09";
+    public static final String MQ_AGENT_ID_BEFORE = "767762e6969a6c77b426b7c7356cef3f";
     // 售后客服 ID
-    public static final String MQ_AGENT_ID_AFTER = "f12b03466611d678797c35fbfe27b7b2";
+//    public static final String MQ_AGENT_ID_AFTER = "f12b03466611d678797c35fbfe27b7b2";
+    public static final String MQ_AGENT_ID_AFTER = "a9ca45600f5aaa4df637bf6920a85ba2";
 
     // -------------------------- 七牛云存储相关 START --------------------------
     public static final String QN_ACCESS_KEY = "";

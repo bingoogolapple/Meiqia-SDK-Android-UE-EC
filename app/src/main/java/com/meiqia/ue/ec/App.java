@@ -16,7 +16,6 @@ import com.meiqia.core.bean.MQMessage;
 import com.meiqia.core.callback.OnClientInfoCallback;
 import com.meiqia.core.callback.OnGetMessageListCallback;
 import com.meiqia.core.callback.OnInitCallback;
-import com.meiqia.meiqiasdk.glideimageloader.GlideImageloader;
 import com.meiqia.meiqiasdk.util.MQConfig;
 import com.meiqia.ue.ec.engine.Engine;
 import com.meiqia.ue.ec.event.UnreadChatMessageEvent;
@@ -99,7 +98,7 @@ public class App extends Application {
 
     private void initMQManager(OnInitCallback onInitCallback) {
         // 55b1b546b06656d9b930deeef07cdc1a
-        MQConfig.init(this, "8896c195558f2e25d5cdd2e586098ef7", new GlideImageloader(), onInitCallback);
+        MQConfig.init(this, "8896c195558f2e25d5cdd2e586098ef7", onInitCallback);
     }
 
     private void initMiPush() {

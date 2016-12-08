@@ -61,13 +61,11 @@ dependencies {
 //    compile(name: 'meiqia-release', ext: 'aar')
 //    compile(name: 'meiqiasdk-release', ext: 'aar')
 
-    compile 'com.meiqia:meiqiasdk:3.1.8@aar'
+    compile 'com.meiqia:meiqiasdk:3.3.9@aar'
 
-    compile 'com.squareup.okhttp:okhttp:2.7.0'
-    compile 'com.commit451:PhotoView:1.2.4'
+    compile 'com.squareup.okhttp3:okhttp:3.3.1'
     compile 'com.nineoldandroids:library:2.4.0'
 
-    compile 'com.meiqia:glideimageloader:1.0.0@aar'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     // ----------------- 美洽 END -----------------
 }
